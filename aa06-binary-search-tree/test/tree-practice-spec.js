@@ -30,9 +30,11 @@ describe('Binary Tree Practice', () => {
 
     //      4
     //    /   \
-    //   2     6
+    //   2     7
     //  / \   / \
-    // 1   3 5   7
+    // 1   3 5   8
+    //            \
+  //0              9
     bstRoot = new TreeNode(4);
     bstRoot.left = new TreeNode(2);
     bstRoot.left.left = new TreeNode(1);
@@ -65,7 +67,7 @@ describe('Binary Tree Practice', () => {
     bstRootBig.right.right.right = new TreeNode(12);
     bstRootBig.right.right.right.right = new TreeNode(15);
     bstRootBig.right.right.right.right.left = new TreeNode(14);
-    
+
     // 1
     //  \
     //   2
@@ -127,7 +129,7 @@ describe('Binary Tree Practice', () => {
     btRootBig.left.right.right.left = new TreeNode(11);
     btRootBig.right.right.right.right = new TreeNode(12);
     btRootBig.right.right.right.right.left = new TreeNode(1);
-    
+
     // 4
     //  \
     //   3
@@ -298,7 +300,7 @@ describe('Binary Tree Practice', () => {
       expect(balancedTree(btRoot.right)).to.be.true;
       expect(balancedTree(btRootUnbalanced.right.right.right.right.right)).to.be.true;
     });
-    
+
     it('should compare the heights of every node in the tree', function() {
       expect(balancedTree(bstRootBig)).to.be.false;
       expect(balancedTree(bstRootBig.left)).to.be.true;
@@ -428,7 +430,7 @@ describe('Binary Tree Practice', () => {
         return (num === 3 || num === 5)
       });
       expect(bstRoot.left.val).to.equal(2)
-      
+
       deleteNodeBST(bstRootBig, 5);
       expect(bstRootBig.left.right.val).to.satisfy(function (num) {
         return (num === 4 || num === 6)
@@ -446,7 +448,3 @@ describe('Binary Tree Practice', () => {
   });
 
 });
-
-
-
-

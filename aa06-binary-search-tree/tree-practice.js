@@ -57,11 +57,13 @@ function getHeight (rootNode) {
 }
 
 function balancedTree (rootNode) {
-
+  if (!rootNode) return true
   const leftHeight = getHeight(rootNode.left)
   const rightHeight = getHeight(rootNode.right)
   const heightDiff = Math.abs(leftHeight - rightHeight)
-  return heightDiff <= 1
+  if (heightDiff > 1) return false
+
+  return balancedTree(rootNode.left) && balancedTree(rootNode.right)
 
 }
 
@@ -79,36 +81,120 @@ function countNodes (rootNode) {
 }
 
 function getParentNode (rootNode, target) {
-  // Your code here
+  // ****CODE IN PROGRESS*****
+  // if (!rootNode) return undefined
+  // if (rootNode.val === target) {
+  //   return null
+  // }
+  // if ((rootNode.left.val === target) || (rootNode.right.val === target)) {
+  //   return rootNode
+  // }else return getParentNode(rootNode.left, target) && getParentNode(rootNode.right, target)
+  //****PASSING CODE
+  if (!rootNode || !target) return undefined;
+
+  if (rootNode.val === target) return null;
+
+  const findParent = (node, targetVal) => {
+    if (!node) return undefined;
+
+    if ((node.left && node.left.val === targetVal) || (node.right && node.right.val === targetVal)) {
+      return node;
+    }
+    const leftResult = findParent(node.left, targetVal);
+    if (leftResult !== undefined) return leftResult;
+    return findParent(node.right, targetVal);
+  };
+
+  return findParent(rootNode, target);
 }
 
 function inOrderPredecessor (rootNode, target) {
-  // Your code here
+  const nodes = [];
+
+  const makeArray = (node = rootNode, arr = nodes) => {
+    if (!node) return
+    makeArray(node.left, arr)
+    arr.push(node)
+    makeArray(node.right, arr)
+  }
+  makeArray()
+  const targetNode = nodes.find((el) => el.val === target)
+  const targetIndex = nodes.indexOf(targetNode)
+  if (targetIndex > 0) {
+    return nodes[targetIndex - 1].val
+  } else return null
 }
 
-function deleteNodeBST(rootNode, target) {
-  // Do a traversal to find the node. Keep track of the parent
+  function deleteNodeBST(rootNode, target) {
+    if (!rootNode) return null;
 
-  // Undefined if the target cannot be found
+    let parent = null;
+    let current = rootNode;
 
-  // Set target based on parent
+    // Find the node to delete and its parent
+    while (current && current.val !== target) {
+      parent = current;
+      if (target < current.val) {
+        current = current.left;
+      } else {
+        current = current.right;
+      }
+    }
 
-  // Case 0: Zero children and no parent:
-  //   return null
+    // If the node with the target value doesn't exist
+    if (!current) return undefined;
 
-  // Case 1: Zero children:
-  //   Set the parent that points to it to null
+    // Case 1: Node to delete has no children
+    if (!current.left && !current.right) {
+      if (!parent) {
+        rootNode = null;
+      } else if (current === parent.left) {
+        parent.left = null;
+      } else {
+        parent.right = null;
+      }
+    }
+    // Case 2: Node to delete has one child
+    else if (!current.right) {
+      if (!parent) {
+        rootNode = current.left;
+      } else if (current === parent.left) {
+        parent.left = current.left;
+      } else {
+        parent.right = current.left;
+      }
+    } else if (!current.left) {
+      if (!parent) {
+        rootNode = current.right;
+      } else if (current === parent.left) {
+        parent.left = current.right;
+      } else {
+        parent.right = current.right;
+      }
+    }
+    // Case 3: Node to delete has two children
+    else {
+      let successor = current.right;
+      let successorParent = current;
+      while (successor.left) {
+        successorParent = successor;
+        successor = successor.left;
+      }
 
-  // Case 2: Two children:
-  //  Set the value to its in-order predecessor, then delete the predecessor
-  //  Replace target node with the left most child on its right side,
-  //  or the right most child on its left side.
-  //  Then delete the child that it was replaced with.
+      // Replace the value of the node to delete with the value of the successor
+      current.val = successor.val;
 
-  // Case 3: One child:
-  //   Make the parent point to the child
+      // Delete the successor node (which is either a leaf or a node with right child only)
+      if (successor === successorParent.left) {
+        successorParent.left = successor.right;
+      } else {
+        successorParent.right = successor.right;
+      }
+    }
 
+    return rootNode;
 }
+
 
 module.exports = {
     findMinBST,
@@ -138,7 +224,7 @@ bstRootBig = new TreeNode(8);
     bstRootBig.right.right.right.right = new TreeNode(15);
     bstRootBig.right.right.right.right.left = new TreeNode(14);
 debugger
-console.log(balancedTree(bstRootBig))
+console.log(inOrderPredecessor(bstRootBig, 5))
     //         8
     //       /   \
     //      3     10
