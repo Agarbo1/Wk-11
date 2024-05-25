@@ -18,7 +18,17 @@ function insertionSort(arr) {
   Return the sorted array
   */
 
-  // Your code here 
+  // Your code here
+  let dupeArr = [...arr];
+  let sorted = [];
+  while (dupeArr.length) {
+    console.log(sorted.join(','))
+    let curr = dupeArr.pop()
+    sorted[sorted.length - 1] = null
+    for (let i = sorted.length - 1; i >= 0; i--) {
+      
+    }
+  }
 }
 
 // In-place Insertion Sort
@@ -40,7 +50,7 @@ function insertionSortInPlace(arr) {
   Return the mutated array
   */
 
-  // Your code here 
+  // Your code here
 }
 
 module.exports = [insertionSort, insertionSortInPlace];
